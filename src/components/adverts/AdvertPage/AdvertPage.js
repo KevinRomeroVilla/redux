@@ -1,24 +1,27 @@
-import { useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useCallback } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-import AdvertDetail from './AdvertDetail';
-import { getAdvert, deleteAdvert } from '../service';
-import useQuery from '../../../hooks/useQuery';
-import useMutation from '../../../hooks/useMutation';
+import AdvertDetail from "./AdvertDetail";
+import { getAdvert, deleteAdvert } from "../service";
+import useQuery from "../../../hooks/useQuery";
+import useMutation from "../../../hooks/useMutation";
+import { useSelector } from "react-redux";
+import { getAdvertdetail } from "../../../store/selectors";
 
 function AdvertPage() {
   const { advertId } = useParams();
   const navigate = useNavigate();
   const getAdvertById = useCallback(() => getAdvert(advertId), [advertId]);
-  const { isLoading, data: advert } = useQuery(getAdvertById);
+  const { isLoading } = useQuery(getAdvertById);
   const mutation = useMutation(deleteAdvert);
+  const advert = useSelector((state) => getAdvertdetail(state, advertId));
 
   const handleDelete = () => {
-    mutation.execute(advertId).then(() => navigate('/'));
+    mutation.execute(advertId).then(() => navigate("/"));
   };
 
   if (isLoading) {
-    return 'Loading...';
+    return "Loading...";
   }
 
   return (
