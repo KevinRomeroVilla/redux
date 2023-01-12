@@ -10,11 +10,10 @@ import { AuthProvider } from "./components/auth/context";
 
 import { configureStore } from "./store";
 
-const store = configureStore();
-window.store = store;
-
 const accessToken = storage.get("auth");
 configureClient({ accessToken });
+
+const store = configureStore({ auth: !!accessToken });
 
 const root = createRoot(document.getElementById("root"));
 root.render(
