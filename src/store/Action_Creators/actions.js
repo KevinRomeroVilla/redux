@@ -13,8 +13,9 @@ export const authlogout = () => ({
   type: AUTH_LOGOUT,
 });
 
-export const AdvertLoaded = () => ({
+export const AdvertLoaded = (adverts) => ({
   type: ADVERT_LOADED,
+  payload: adverts,
 });
 
 export const advertCreated = () => ({

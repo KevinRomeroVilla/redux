@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function useQuery(query) {
-  const [data, setData] = useState(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -12,12 +11,11 @@ function useQuery(query) {
       setError(null);
       setIsLoading(true);
     };
-    const finishExecution = (error, data) => {
+    const finishExecution = (error) => {
       setIsLoading(false);
       if (error) {
         return setError(error);
       }
-      setData(data);
     };
     const execute = async () => {
       startExecution();
@@ -27,10 +25,10 @@ function useQuery(query) {
       } catch (error) {
         finishExecution(error);
         if (error.statusCode === 401) {
-          navigate('/login');
+          navigate("/login");
         }
         if (error.statusCode === 404) {
-          navigate('/404');
+          navigate("/404");
         }
       }
     };
@@ -40,7 +38,6 @@ function useQuery(query) {
   return {
     isLoading,
     error,
-    data,
   };
 }
 

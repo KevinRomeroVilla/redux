@@ -1,28 +1,38 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import FiltersForm from './FiltersForm';
-import AdvertsList from './AdvertsList';
-import EmptyList from './EmptyList';
-import storage from '../../../utils/storage';
-import { getAdverts } from '../service';
-import { defaultFilters, filterAdverts } from './filters';
-import useQuery from '../../../hooks/useQuery';
+import FiltersForm from "./FiltersForm";
+import AdvertsList from "./AdvertsList";
+import EmptyList from "./EmptyList";
+import storage from "../../../utils/storage";
+import { getAdverts } from "../service";
+import { defaultFilters, filterAdverts } from "./filters";
+import useQuery from "../../../hooks/useQuery";
+import { connect } from "react-redux";
+import { AdvertLoaded } from "../../../store/Action_Creators/actions";
+import { getAllAdverts } from "../../../store/selectors";
 
-const getFilters = () => storage.get('filters') || defaultFilters;
-const saveFilters = filters => storage.set('filters', filters);
+const getFilters = () => storage.get("filters") || defaultFilters;
+const saveFilters = (filters) => storage.set("filters", filters);
 
-function AdvertsPage() {
+function AdvertsPage({ onAdvertsLoaded, adverts, ...props }) {
   const [filters, setFilters] = useState(getFilters);
-  const { isLoading, data: adverts = [] } = useQuery(getAdverts);
+
+  //tengo que corregir esta parte.
+  const { isLoading } = useQuery(getAdverts);
 
   useEffect(() => {
     saveFilters(filters);
-  }, [filters]);
+    const execute = async () => {
+      const adverts = await getAdverts();
+      onAdvertsLoaded(adverts);
+    };
+    execute();
+  }, [filters, onAdvertsLoaded]);
 
   const filteredAdverts = filterAdverts(adverts, filters);
 
   if (isLoading) {
-    return 'Loading...';
+    return "Loading...";
   }
 
   return (
@@ -44,4 +54,17 @@ function AdvertsPage() {
   );
 }
 
-export default AdvertsPage;
+const mapStateToProps = (state, ownProps) => ({
+  adverts: getAllAdverts(state),
+});
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  onAdvertsLoaded: (adverts) => dispatch(AdvertLoaded(adverts)),
+});
+
+const connectedAdvertsPage = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AdvertsPage);
+
+export default connectedAdvertsPage;

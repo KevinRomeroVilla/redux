@@ -32,7 +32,8 @@ const AuthButton = () => {
 
 //con esta parte me sale un warning sobre que la variable "handlelogout" es undefined, esto debido a que esta marado como "isRequired", deje esta parte sin resolver porque necesitaba seguir avanzando, si para el momento de la practica no lo corrijo me gustaria que en las correciones mi enviara un link o algo para poder corregirlo, muchas gracias.
 AuthButton.propTypes = {
-  authlogout: T.func.isRequired,
+  //handlelogout: T.func.isRequired
+  authlogout: T.func,
   isLogged: T.bool,
 };
 
