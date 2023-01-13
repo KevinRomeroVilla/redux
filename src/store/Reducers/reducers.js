@@ -1,6 +1,7 @@
 import {
-  //ADVERT_CREATED,
+  ADVERTS_LOADED_SUCCESS,
   ADVERT_LOADED_SUCCESS,
+  //ADVERT_CREATED,
   //AUTH_LOGIN_FAILURE,
   //AUTH_LOGIN_REQUEST,
   AUTH_LOGIN_SUCCESS,
@@ -33,8 +34,10 @@ export function auth(state = defaultState.auth, action) {
 
 export function adverts(state = defaultState.adverts, action) {
   switch (action.type) {
-    case ADVERT_LOADED_SUCCESS:
+    case ADVERTS_LOADED_SUCCESS:
       return { areLoaded: true, data: action.payload };
+    case ADVERT_LOADED_SUCCESS:
+      return { ...state, data: [...state.data, action.payload] };
     default:
       return state;
   }
@@ -55,6 +58,13 @@ export function ui(state = defaultState.ui, action) {
     };
   }
   if (/_SUCCESS$/.test(action.type)) {
+    return {
+      error: null,
+      isLoading: false,
+    };
+  }
+
+  if (/_FAILURE$/.test(action.type)) {
     return {
       error: null,
       isLoading: false,

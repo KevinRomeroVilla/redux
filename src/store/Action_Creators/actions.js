@@ -1,5 +1,8 @@
-import { areAdvertsLoaded } from "../selectors";
+import { areAdvertsLoaded, getAdvertdetail } from "../selectors";
 import {
+  ADVERTS_LOADED_FAILURE,
+  ADVERTS_LOADED_REQUEST,
+  ADVERTS_LOADED_SUCCESS,
   ADVERT_CREATED,
   ADVERT_LOADED_FAILURE,
   ADVERT_LOADED_REQUEST,
@@ -42,17 +45,17 @@ export const authlogout = () => ({
   type: AUTH_LOGOUT,
 });
 
-export const advertLoadedRequest = () => ({
-  type: ADVERT_LOADED_REQUEST,
+export const advertsLoadedRequest = () => ({
+  type: ADVERTS_LOADED_REQUEST,
 });
 
-export const advertLoadedSuccess = (adverts) => ({
-  type: ADVERT_LOADED_SUCCESS,
+export const advertsLoadedSuccess = (adverts) => ({
+  type: ADVERTS_LOADED_SUCCESS,
   payload: adverts,
 });
 
-export const advertLoadedFailure = (error) => ({
-  type: ADVERT_LOADED_FAILURE,
+export const advertsLoadedFailure = (error) => ({
+  type: ADVERTS_LOADED_FAILURE,
   payload: error,
 });
 
@@ -62,9 +65,39 @@ export const advertsLoad = () => {
     if (areLoaded) return;
 
     try {
-      dispatch(advertLoadedRequest());
+      dispatch(advertsLoadedRequest());
       const adverts = await api.adverts.getAdverts();
-      dispatch(advertLoadedSuccess(adverts));
+      dispatch(advertsLoadedSuccess(adverts));
+    } catch (error) {
+      dispatch(advertsLoadedFailure(error));
+      throw error;
+    }
+  };
+};
+
+export const advertLoadedRequest = () => ({
+  type: ADVERT_LOADED_REQUEST,
+});
+
+export const advertLoadedSuccess = (advert) => ({
+  type: ADVERT_LOADED_SUCCESS,
+  payload: advert,
+});
+
+export const advertLoadedFailure = (error) => ({
+  type: ADVERT_LOADED_FAILURE,
+  payload: error,
+});
+
+export const advertLoad = (advertId) => {
+  return async function (dispatch, getState, { api }) {
+    const isLoaded = getAdvertdetail(advertId)(getState());
+    if (isLoaded) return;
+
+    try {
+      dispatch(advertLoadedRequest());
+      const advert = await api.adverts.getAdvert(advertId);
+      dispatch(advertLoadedSuccess(advert));
     } catch (error) {
       dispatch(advertLoadedFailure(error));
       throw error;
