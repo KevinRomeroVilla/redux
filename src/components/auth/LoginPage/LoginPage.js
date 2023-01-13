@@ -19,7 +19,6 @@ function LoginPage() {
 
   const handleSubmit = async (credentials) => {
     //event.preventDefault();
-    debugger;
     await dispatch(authLogin(credentials)).then(() => {
       const from = location.state?.from?.pathname || "/";
       navigate(from, { replace: true });

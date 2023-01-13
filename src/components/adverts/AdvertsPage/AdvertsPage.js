@@ -4,12 +4,10 @@ import FiltersForm from "./FiltersForm";
 import AdvertsList from "./AdvertsList";
 import EmptyList from "./EmptyList";
 import storage from "../../../utils/storage";
-import { getAdverts } from "../service";
 import { defaultFilters, filterAdverts } from "./filters";
-import useQuery from "../../../hooks/useQuery";
-import { connect } from "react-redux";
-import { AdvertLoaded } from "../../../store/Action_Creators/actions";
-import { getAllAdverts } from "../../../store/selectors";
+import { connect, useSelector } from "react-redux";
+import { advertsLoad } from "../../../store/Action_Creators/actions";
+import { getAllAdverts, getUi } from "../../../store/selectors";
 
 const getFilters = () => storage.get("filters") || defaultFilters;
 const saveFilters = (filters) => storage.set("filters", filters);
@@ -17,16 +15,11 @@ const saveFilters = (filters) => storage.set("filters", filters);
 function AdvertsPage({ onAdvertsLoaded, adverts, ...props }) {
   const [filters, setFilters] = useState(getFilters);
 
-  //tengo que corregir esta parte.
-  const { isLoading } = useQuery(getAdverts);
+  const { isLoading } = useSelector(getUi);
 
   useEffect(() => {
     saveFilters(filters);
-    const execute = async () => {
-      const adverts = await getAdverts();
-      onAdvertsLoaded(adverts);
-    };
-    execute();
+    onAdvertsLoaded();
   }, [filters, onAdvertsLoaded]);
 
   const filteredAdverts = filterAdverts(adverts, filters);
@@ -59,7 +52,7 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  onAdvertsLoaded: (adverts) => dispatch(AdvertLoaded(adverts)),
+  onAdvertsLoaded: () => dispatch(advertsLoad()),
 });
 
 const connectedAdvertsPage = connect(
