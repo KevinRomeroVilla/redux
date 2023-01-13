@@ -14,7 +14,7 @@ function AdvertPage() {
   const getAdvertById = useCallback(() => getAdvert(advertId), [advertId]);
   const { isLoading } = useQuery(getAdvertById);
   const mutation = useMutation(deleteAdvert);
-  const advert = useSelector((state) => getAdvertdetail(state, advertId));
+  const advert = useSelector(getAdvertdetail(advertId));
 
   const handleDelete = () => {
     mutation.execute(advertId).then(() => navigate("/"));

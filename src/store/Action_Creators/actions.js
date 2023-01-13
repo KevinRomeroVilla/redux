@@ -1,12 +1,25 @@
 import {
   ADVERT_CREATED,
   ADVERT_LOADED,
-  AUTH_LOGIN,
+  AUTH_LOGIN_FAILURE,
+  AUTH_LOGIN_REQUEST,
+  AUTH_LOGIN_SUCCESS,
   AUTH_LOGOUT,
+  UI_RESET_ERROR,
 } from "../types/types";
 
-export const authlogin = () => ({
-  type: AUTH_LOGIN,
+export const authLoginRequest = () => ({
+  type: AUTH_LOGIN_REQUEST,
+});
+
+export const authLoginSuccess = () => ({
+  type: AUTH_LOGIN_SUCCESS,
+});
+
+export const authLoginFailure = (error) => ({
+  type: AUTH_LOGIN_FAILURE,
+  payload: error,
+  error: true,
 });
 
 export const authlogout = () => ({
@@ -20,4 +33,8 @@ export const AdvertLoaded = (adverts) => ({
 
 export const advertCreated = () => ({
   type: ADVERT_CREATED,
+});
+
+export const uiResetError = () => ({
+  type: UI_RESET_ERROR,
 });
