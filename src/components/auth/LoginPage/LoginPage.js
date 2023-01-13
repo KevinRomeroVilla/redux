@@ -1,14 +1,11 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { login } from "../service";
 import LoginForm from "./LoginForm";
 //import useMutation from "../../../hooks/useMutation";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  authLoginFailure,
-  authLoginRequest,
-  authLoginSuccess,
+  authLogin,
   uiResetError,
 } from "../../../store/Action_Creators/actions";
 import { getUi } from "../../../store/selectors";
@@ -22,16 +19,11 @@ function LoginPage() {
 
   const handleSubmit = async (credentials) => {
     //event.preventDefault();
-
-    dispatch(authLoginRequest());
-    try {
-      await login(credentials);
-      dispatch(authLoginSuccess());
+    debugger;
+    await dispatch(authLogin(credentials)).then(() => {
       const from = location.state?.from?.pathname || "/";
       navigate(from, { replace: true });
-    } catch (error) {
-      dispatch(authLoginFailure(error));
-    }
+    });
 
     // execute(credentials)
     //   .then(dispatch(authLoginSuccess()))
