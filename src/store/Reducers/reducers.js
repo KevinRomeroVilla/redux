@@ -11,7 +11,7 @@ import {
   UI_RESET_ERROR,
 } from "../types/types";
 
-const defaultState = {
+export const defaultState = {
   auth: false,
   tags: {
     tagsLoaded: false,
