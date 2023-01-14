@@ -11,3 +11,7 @@ export const getAdvertdetail = (advertId) => (state) =>
   getAllAdverts(state).find((advert) => advert.id.toString() === advertId);
 
 export const getUi = (state) => state.ui;
+
+export const tagsDone = (state) => state.tags.tagsLoaded;
+
+export const getTags = (state) => state.tags;

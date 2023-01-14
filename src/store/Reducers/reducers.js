@@ -1,16 +1,22 @@
 import {
   ADVERTS_LOADED_SUCCESS,
+  ADVERT_CREATED_SUCCESS,
   ADVERT_LOADED_SUCCESS,
   //ADVERT_CREATED,
   //AUTH_LOGIN_FAILURE,
   //AUTH_LOGIN_REQUEST,
   AUTH_LOGIN_SUCCESS,
   AUTH_LOGOUT,
+  GET_TAGS_SUCCESS,
   UI_RESET_ERROR,
 } from "../types/types";
 
 const defaultState = {
   auth: false,
+  tags: {
+    tagsLoaded: false,
+    data: [],
+  },
   adverts: {
     areLoaded: false,
     data: [],
@@ -38,6 +44,17 @@ export function adverts(state = defaultState.adverts, action) {
       return { areLoaded: true, data: action.payload };
     case ADVERT_LOADED_SUCCESS:
       return { ...state, data: [...state.data, action.payload] };
+    case ADVERT_CREATED_SUCCESS:
+      return { ...state, data: [action.payload, ...state.data] };
+    default:
+      return state;
+  }
+}
+
+export function tags(state = defaultState.tags, action) {
+  switch (action.type) {
+    case GET_TAGS_SUCCESS:
+      return { tagsLoaded: true, data: action.payload };
     default:
       return state;
   }

@@ -6,10 +6,11 @@ import thunk from "redux-thunk";
 import * as reducers from "./Reducers/reducers";
 import * as auth from "../components/auth/service";
 import * as adverts from "../components/adverts/service";
+import * as tags from "../components/adverts/servicetags";
 
 //const reducer = combineReducers({auth, adverts})
 const reducer = combineReducers(reducers);
-const middelware = [thunk.withExtraArgument({ api: { auth, adverts } })];
+const middelware = [thunk.withExtraArgument({ api: { auth, adverts, tags } })];
 
 export function configureStore(preloadedState) {
   const store = createStore(

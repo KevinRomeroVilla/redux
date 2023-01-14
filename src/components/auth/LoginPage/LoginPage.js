@@ -18,7 +18,6 @@ function LoginPage() {
   const handleResetError = () => dispatch(uiResetError());
 
   const handleSubmit = async (credentials) => {
-    //event.preventDefault();
     await dispatch(authLogin(credentials)).then(() => {
       const from = location.state?.from?.pathname || "/";
       navigate(from, { replace: true });

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function useQuery(query) {
+  const [data, setData] = useState(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -11,11 +12,12 @@ function useQuery(query) {
       setError(null);
       setIsLoading(true);
     };
-    const finishExecution = (error) => {
+    const finishExecution = (error, data) => {
       setIsLoading(false);
       if (error) {
         return setError(error);
       }
+      setData(data);
     };
     const execute = async () => {
       startExecution();
@@ -38,6 +40,7 @@ function useQuery(query) {
   return {
     isLoading,
     error,
+    data,
   };
 }
 

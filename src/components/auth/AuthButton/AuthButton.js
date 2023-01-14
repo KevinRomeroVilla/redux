@@ -2,8 +2,6 @@ import { Link } from "react-router-dom";
 import T from "prop-types";
 
 import { ConfirmationButton } from "../../common";
-import { logout } from "../service";
-import useMutation from "../../../hooks/useMutation";
 import { useDispatch, useSelector } from "react-redux";
 import { getIsLogged } from "../../../store/selectors";
 import { authlogout } from "../../../store/Action_Creators/actions";
@@ -11,10 +9,8 @@ import { authlogout } from "../../../store/Action_Creators/actions";
 const AuthButton = () => {
   const isLogged = useSelector(getIsLogged);
   const dispatch = useDispatch();
-  const mutation = useMutation(logout);
 
   const handleLogoutConfirm = async () => {
-    await mutation.execute();
     dispatch(authlogout());
   };
 
