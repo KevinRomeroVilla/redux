@@ -17,12 +17,8 @@ function AdvertPage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(advertLoad(advertId)).catch((error) => {
-      if (error.status === 404) {
-        navigate("404");
-      }
-    });
-  }, [dispatch, advertId, navigate]);
+    dispatch(advertLoad(advertId));
+  }, [dispatch, advertId]);
 
   const handleDelete = () => {
     mutation.execute(advertId).then(() => navigate("/"));

@@ -34,14 +34,15 @@ export const authLoginFailure = (error) => ({
 });
 
 export const authLogin = (credentials) => {
-  return async function (dispatch, getstate, { api }) {
+  return async function (dispatch, getstate, { api, router }) {
     try {
       dispatch(authLoginRequest());
       await api.auth.login(credentials);
       dispatch(authLoginSuccess());
+      const from = router.state.location.state?.from?.pathname || "/";
+      router.navigate(from, { replace: true });
     } catch (error) {
       dispatch(authLoginFailure(error));
-      throw error;
     }
   };
 };
@@ -102,7 +103,7 @@ export const advertLoadedFailure = (error) => ({
 });
 
 export const advertLoad = (advertId) => {
-  return async function (dispatch, getState, { api }) {
+  return async function (dispatch, getState, { api, router }) {
     const isLoaded = getAdvertdetail(advertId)(getState());
     if (isLoaded) return;
 
@@ -112,6 +113,9 @@ export const advertLoad = (advertId) => {
       dispatch(advertLoadedSuccess(advert));
     } catch (error) {
       dispatch(advertLoadedFailure(error));
+      if (error.statusCode === 404) {
+        router.navigate("/404");
+      }
       throw error;
     }
   };
@@ -132,15 +136,19 @@ export const advertCreatedFailure = (error) => ({
   error: true,
 });
 
-export const advertscreated = (advert) => {
-  return async function (dispatch, getState, { api }) {
+export const advertCreated = (advert) => {
+  return async function (dispatch, getState, { api, router }) {
     try {
       dispatch(advertCreatedRequest());
       const createdAdvert = await api.adverts.createAdvert(advert);
       dispatch(advertCreatedSuccess(createdAdvert));
+      router.navigate(`/adverts/${createdAdvert.id}`);
+      return createdAdvert;
     } catch (error) {
       dispatch(advertCreatedFailure(error));
-      throw error;
+      if (error.statusCode === 401) {
+        router.navigate("/login");
+      }
     }
   };
 };

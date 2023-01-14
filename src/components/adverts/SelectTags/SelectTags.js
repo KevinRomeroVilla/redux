@@ -10,7 +10,7 @@ function SelectTags(props) {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(allTags());
-  }, []);
+  }, [dispatch]);
 
   const { data: tags = [] } = useSelector(getTags);
 

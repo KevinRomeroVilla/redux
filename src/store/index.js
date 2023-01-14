@@ -10,9 +10,11 @@ import * as tags from "../components/adverts/servicetags";
 
 //const reducer = combineReducers({auth, adverts})
 const reducer = combineReducers(reducers);
-const middelware = [thunk.withExtraArgument({ api: { auth, adverts, tags } })];
 
-export function configureStore(preloadedState) {
+export function configureStore(preloadedState, { router }) {
+  const middelware = [
+    thunk.withExtraArgument({ api: { auth, adverts, tags }, router }),
+  ];
   const store = createStore(
     reducer,
     preloadedState,
