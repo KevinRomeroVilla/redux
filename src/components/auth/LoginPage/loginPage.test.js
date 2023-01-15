@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom/extend-expect";
 import { Provider } from "react-redux";
 import { authLogin } from "../../../store/Action_Creators/actions";
 import { defaultState } from "../../../store/Reducers/reducers";
@@ -34,10 +35,10 @@ describe("LoginPage", () => {
     const userPasswordInput = screen.getByPlaceholderText(/password/);
     const submitButton = screen.getByRole("button");
 
-    expect(submitButton).toBeDisabled;
+    expect(submitButton).toBeDisabled();
     fireEvent.change(usernameInput, { target: { value: username } });
     fireEvent.change(userPasswordInput, { target: { value: password } });
-    expect(submitButton).toBeEnabled;
+    expect(submitButton).toBeEnabled();
     fireEvent.click(submitButton);
     expect(authLogin).toHaveBeenCalled();
   });
