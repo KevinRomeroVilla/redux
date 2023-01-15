@@ -6,6 +6,9 @@ import {
   ADVERT_CREATED_FAILURE,
   ADVERT_CREATED_REQUEST,
   ADVERT_CREATED_SUCCESS,
+  ADVERT_DELETE_FAILURE,
+  ADVERT_DELETE_REQUEST,
+  ADVERT_DELETE_SUCCESS,
   ADVERT_LOADED_FAILURE,
   ADVERT_LOADED_REQUEST,
   ADVERT_LOADED_SUCCESS,
@@ -146,6 +149,37 @@ export const advertCreated = (advert) => {
       return createdAdvert;
     } catch (error) {
       dispatch(advertCreatedFailure(error));
+      if (error.statusCode === 401) {
+        router.navigate("/login");
+      }
+    }
+  };
+};
+
+export const advertDeleteRequest = () => ({
+  type: ADVERT_DELETE_REQUEST,
+});
+
+export const advertDeleteSuccess = (adverts) => ({
+  type: ADVERT_DELETE_SUCCESS,
+  payload: adverts,
+});
+
+export const advertDeleteFailure = (error) => ({
+  type: ADVERT_DELETE_FAILURE,
+  payload: error,
+  error: true,
+});
+
+export const advertDelete = (advert) => {
+  return async function (dispatch, getState, { api, router }) {
+    try {
+      dispatch(advertDeleteRequest());
+      await api.adverts.deleteAdvert(advert);
+      dispatch(advertDeleteSuccess());
+      router.navigate(`/`);
+    } catch (error) {
+      dispatch(advertDeleteFailure(error));
       if (error.statusCode === 401) {
         router.navigate("/login");
       }

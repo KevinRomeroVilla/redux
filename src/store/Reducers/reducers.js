@@ -1,6 +1,7 @@
 import {
   ADVERTS_LOADED_SUCCESS,
   ADVERT_CREATED_SUCCESS,
+  ADVERT_DELETE_SUCCESS,
   ADVERT_LOADED_SUCCESS,
   //ADVERT_CREATED,
   //AUTH_LOGIN_FAILURE,
@@ -46,6 +47,8 @@ export function adverts(state = defaultState.adverts, action) {
       return { ...state, data: [...state.data, action.payload] };
     case ADVERT_CREATED_SUCCESS:
       return { ...state, data: [action.payload, ...state.data] };
+    case ADVERT_DELETE_SUCCESS:
+      return state;
     default:
       return state;
   }
